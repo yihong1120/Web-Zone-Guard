@@ -1,28 +1,25 @@
-<!-- login.html -->
 {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Account</title>
+    <title>VisionSnap</title>
     <link rel="stylesheet" type="text/css" href="{% static 'VisionSnap/styles.css' %}">
 </head>
 <body>
     <header>
-        <h1>Welcome, Guest!</h1>
+        <h1>Records</h1>
     </header>
     <nav>
         <ul>
-            <li><a href="{% url 'login_view' %}">Log in</a></li>
-            <li><a href="{% url 'signup_view' %}">Sign up</a></li>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'controls' %}">Controls</a></li>
+            <li><a href="{% url 'records' %}">Records</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
         </ul>
     </nav>
     <main>
-        <h2>Login</h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
+        <!-- Main content goes here -->
+        <p>Records Page</p>
     </main>
     <footer>
         <p>© <span id="currentYear"></span> Web Zone Guard. All rights reserved.</p>

@@ -1,7 +1,39 @@
 <!-- signup.html -->
-<h2>Sign up</h2>
-<form method="post">
-{% csrf_token %}
-{{ form.as_p }}
-<button type="submit">Sign up</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Account</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'VisionSnap/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ username }}!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'login_view' %}">Log in</a></li>
+            <li><a href="{% url 'signup_view' %}">Sign up</a></li>
+        </ul>
+    </nav>
+    <main>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Sign up</button>
+        </form>
+    </main>
+    <footer>
+        <p>© <span id="currentYear"></span> Web Zone Guard. All rights reserved.</p>
+
+        <script>
+            // 取得當前的年份
+            var currentYear = new Date().getFullYear();
+
+            // 更新HTML中的年份
+            document.getElementById("currentYear").textContent = currentYear;
+        </script>
+
+    </footer>
+</body>
+</html>
