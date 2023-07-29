@@ -1,0 +1,38 @@
+<!-- records.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VisionSnap</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'VisionSnap/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Records</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'controls' %}">Controls</a></li>
+            <li><a href="{% url 'records' %}">History</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- Main content goes here -->
+        <p>Records Page</p>
+    </main>
+    <footer>
+        <p>© <span id="currentYear"></span> Web Zone Guard. All rights reserved.</p>
+
+        <script>
+            // Obtains the current year
+            var currentYear = new Date().getFullYear();
+
+            // Update the year in the HTML
+            document.getElementById("currentYear").textContent = currentYear;
+        </script>
+
+    </footer>
+</body>
+</html>
