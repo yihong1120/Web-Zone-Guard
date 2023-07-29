@@ -1,4 +1,4 @@
-<!-- controls.html -->
+<!-- account.html -->
 {% load static %}
 <!DOCTYPE html>
 <html>
@@ -8,7 +8,7 @@
 </head>
 <body>
     <header>
-        <h1>Controls</h1>
+        <h1>Account</h1>
     </header>
     <nav>
         <ul>
@@ -20,7 +20,8 @@
     </nav>
     <main>
         <!-- Main content goes here -->
-        <p>Controls Page</p>
+        <p>Log Out Page</p>
+        <a href="{% url 'logout_view' %}">Logout</a>
     </main>
     <footer>
         <p>© <span id="currentYear"></span> Web Zone Guard. All rights reserved.</p>

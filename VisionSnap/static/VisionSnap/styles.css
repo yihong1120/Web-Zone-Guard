@@ -47,6 +47,7 @@ nav ul li a:hover {
 
 main {
     padding: 20px;
+    margin-bottom: 60px;  /* add this line */
 }
 
 footer {
@@ -56,4 +57,12 @@ footer {
     position: fixed;
     width: 100%;
     bottom: 0;
+    z-index: 1; /* Add a z-index to ensure the footer is above the main content */
+}
+
+#imageDisplay {
+    max-width: 720px;
+    max-height: 720px;
+    display: block;
+    margin: 0 auto;
 }
