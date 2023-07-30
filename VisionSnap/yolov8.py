@@ -9,7 +9,9 @@ class YOLOInference:
         results = self.model(source, stream=True)
 
         for result in results:
-            print(result.boxes.data)
+            detections = result.boxes.data
+            orig_img = result.orig_img
+            yield detections, orig_img
 
     def process_image(self, source):
         results = self.model(source)  # not streaming for a single image
@@ -57,8 +59,8 @@ if __name__ == '__main__':
     yolo_inference = YOLOInference('models/yolov8x.pt')
     # detections, orig_img = yolo_inference.process_image('Tallinn.png')
     
-    # url = 'https://www.youtube.com/watch?v=z_mlibCfgFI&ab_channel=%E6%A1%83%E5%9C%92%E6%99%BA%E6%85%A7%E6%97%85%E9%81%8A%E9%9B%B2TaoyuanTravel'
-    url = 'https://finnoytravel.com/images/Tallinn_Christmas_market_family_visitors.jpg'
+    # url = 'https://finnoytravel.com/images/Tallinn_Christmas_market_family_visitors.jpg'
+    url = 'https://www.youtube.com/watch?v=z_mlibCfgFI&ab_channel=%E6%A1%83%E5%9C%92%E6%99%BA%E6%85%A7%E6%97%85%E9%81%8A%E9%9B%B2TaoyuanTravel'
     detections, orig_img = yolo_inference.process_image(url)
 
     image = yolo_inference.draw_boxes(orig_img, detections, YOLOInference.get_class_names())

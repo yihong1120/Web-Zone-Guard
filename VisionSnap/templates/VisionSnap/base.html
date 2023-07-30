@@ -1,0 +1,30 @@
+<!-- base.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VisionSnap</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'VisionSnap/styles.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ username }}!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'controls' %}">Controls</a></li>
+            <li><a href="{% url 'records' %}">History</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+        </ul>
+    </nav>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+    <footer>
+        <p>© <span id="currentYear"></span> yihong1120. All rights reserved.</p>
+        <script src="{% static 'VisionSnap/footer.js' %}"></script>
+    </footer>
+</body>
+</html>

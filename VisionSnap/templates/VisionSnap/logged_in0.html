@@ -1,0 +1,173 @@
+<!-- logged_in.html -->
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VisionSnap</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'VisionSnap/styles.css' %}">
+    <style>
+        .collapse-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+        }
+    </style>
+    <script>
+        function toggleCollapse(collapseId) {
+            const content = document.getElementById(collapseId);
+            if (content.style.maxHeight){
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } 
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Welcome, {{ username }}!</h1>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'controls' %}">Controls</a></li>
+            <li><a href="{% url 'records' %}">History</a></li>
+            <li><a href="{% url 'account' %}">Account</a></li>
+        </ul>
+    </nav>
+    <main>
+        <!-- Media Viewer -->
+        <div style="display: flex; align-items: center;">
+            <div>
+                <h2>Media Viewer</h2>
+                <input type="file" id="imageInput" accept="image/*">
+                <input type="text" id="imageUrlInput" placeholder="Enter URL">
+                <button id="loadUrlButton">Load from URL</button>
+                <div id="placeholder" style="width: 720px; height: 720px; background-color: gray;"></div>
+                <img id="imageDisplay" src="#" alt="Your Media Will Display Here" />
+            </div>
+            
+            <div style="margin-left: 20px;">
+                <!-- Slide bar -->
+                <h3>Polygon Transparency</h3>
+                <input type="range" min="1" max="100" value="50" id="slideBar">
+
+                <!-- Radio buttons -->
+                <h3>Lines and Points Transparency</h3>
+                <div>
+                    <input type="radio" id="option1" name="options" checked>
+                    <label for="option1"> Yes</label><br>
+                    <input type="radio" id="option2" name="options">
+                    <label for="option2">  No</label>
+                </div>
+
+                <!-- Checkbox buttons -->
+                <h3 onclick="toggleCollapse('collapseContent')">Predict Class Selection</h3>
+                <div id="collapseContent" class="collapse-content">
+                    {% for key, value in pred_class_names.items %}
+                    <input type="checkbox" id="{{ key }}" name="{{ key }}" > <!--'checked' Add checked attribute -->
+                    <label for="{{ key }}">{{ value }}</label><br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex">
+            <div>
+                <h3>All Predicates</h3>
+                <ul id="allPred"></ul>
+            </div>
+        
+            <div style="margin-left: 40px;">
+                <h3>Selected Predicates</h3>
+                <ul id="selectedPred"></ul>
+            </div>
+
+            <div style="margin-left: 40px;">
+                <!-- Checkbox buttons -->
+                <h3>Select Shown Predication</h3>
+                <div id="shownPredContent">
+                    {% for key, value in shownPredData.items %}
+                    <input type="checkbox" id="shownPred_{{ key }}" name="shownPred_{{ key }}" checked> 
+                    <label for="shownPred_{{ key }}">{{ value }}</label><br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>  
+        
+        <script>
+            var imageInput = document.getElementById("imageInput");
+
+            var allPred = document.getElementById("allPred");
+            var selectedPred = document.getElementById("selectedPred");
+                    
+            // Access the JSON data from Django
+            var allPredData = JSON.parse('{{ allPredData|escapejs }}');
+            var selectedPredData = JSON.parse('{{ selectedPredData|escapejs }}');
+            
+            allPredData.forEach(function(item) {
+                var li = document.createElement("li");
+                li.textContent = item;
+                allPred.appendChild(li);
+            });
+            
+            selectedPredData.forEach(function(item) {
+                var li = document.createElement("li");
+                li.textContent = item;
+                selectedPred.appendChild(li);
+            });
+
+            var loadUrlButton = document.getElementById("loadUrlButton");
+            var imageUrlInput = document.getElementById("imageUrlInput");
+            var imageDisplay = document.getElementById("imageDisplay");
+            var placeholder = document.getElementById("placeholder");
+
+            // Event listener for the Load from URL button
+            loadUrlButton.onclick = function() {
+                // AJAX request to send URL to the backend
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{% url 'process_url' %}", true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+
+                xhr.onreadystatechange = function() {
+                    if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+                        var res = JSON.parse(this.responseText);
+                        if (res.status === 'success') {
+                            // Update the src attribute of the image with the image received from the backend
+                            imageDisplay.src = 'data:image/jpeg;base64,' + res.image;
+                            imageDisplay.style.display = "block";  // display the image element
+                            placeholder.style.display = "none";  // hide the placeholder
+                        }
+                    }
+                }
+                xhr.send("url=" + encodeURIComponent(imageUrlInput.value));
+            }
+
+            imageInput.onchange = function(e) {
+                var reader = new FileReader();
+
+                reader.onload = function(event){
+                    imageDisplay.src = event.target.result;
+                    imageDisplay.style.display = "block";
+                    placeholder.style.display = "none";
+                }
+                reader.readAsDataURL(e.target.files[0]);
+            }
+        </script>
+        
+    </main>
+    <footer>
+        <p>© <span id="currentYear"></span> Web Zone Guard. All rights reserved.</p>
+
+        <script>
+            // Obtain the current year
+            var currentYear = new Date().getFullYear();
+
+            // Update the year in html
+            document.getElementById("currentYear").textContent = currentYear;
+        </script>
+
+    </footer>
+</body>
+</html>
