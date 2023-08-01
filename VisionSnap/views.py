@@ -9,6 +9,7 @@ import base64
 import json
 import os
 import requests
+import torch
 from PIL import Image
 from io import BytesIO
 
@@ -65,22 +66,39 @@ def get_url_content_type(url):
     except (requests.exceptions.RequestException, Exception) as e:
         return str(e)
 
+import torch
+
+def filter_detections(detections, selected_classes):
+    # Determine which rows in 'detections' have an object ID that exists in the selection
+    mask = torch.isin(detections[:, 5], selected_classes)
+
+    # Retain only the rows in 'detections' that meet the criteria
+    filtered_detections = detections[mask]
+    return filtered_detections
+
 @csrf_exempt
 def process_url(request):
     if request.method == 'POST':
         url = request.POST.get('url')
-        print(url)
         content_type = get_url_content_type(url)
         yolo_inference = YOLOInference('models/yolov8x.pt')
 
-        if content_type == 'image':
-            print("oui, c'est une image.")
+        # Convert the selection in the session to a tensor
+        pred_class_selection = request.session.get('pred_class_selection', [])
+        selected_classes = torch.tensor([int(i) for i in pred_class_selection])
 
+        if content_type == 'image':
             # Image process
             detections, orig_img, img_path = yolo_inference.process_image(url)
-            image = yolo_inference.draw_boxes(orig_img, detections, YOLOInference.get_class_names())
 
-            # 將 numpy array 轉換為 PIL image
+            if pred_class_selection:
+                filtered_detections = filter_detections(detections, selected_classes)
+            else:
+                filtered_detections = detections
+
+            image = yolo_inference.draw_boxes(orig_img, filtered_detections, YOLOInference.get_class_names())
+
+            # Convert numpy array to PIL image
             image_pil = Image.fromarray(image)
 
             buffered = BytesIO()
@@ -88,15 +106,18 @@ def process_url(request):
             img_str = base64.b64encode(buffered.getvalue()).decode()
             os.remove(img_path)
 
-            # 將 Base64 字串包裝在 JSON 物件中並返回到前端
+            # Wrap the Base64 string in a JSON object and return it to the front end
             return JsonResponse({'status': 'success', 'image': img_str})
 
         elif content_type == 'video':
-            print("c'est un vidéo.")
-
             def generate():
                 for detections, orig_img in yolo_inference.process_video(url):
-                    image = yolo_inference.draw_boxes(orig_img, detections, yolo_inference.get_class_names())
+                    if pred_class_selection:
+                        filtered_detections = filter_detections(detections, selected_classes)
+                    else:
+                        filtered_detections = detections
+
+                    image = yolo_inference.draw_boxes(orig_img, filtered_detections, yolo_inference.get_class_names())
                     image_pil = Image.fromarray(image)
 
                     buffered = BytesIO()
@@ -105,9 +126,24 @@ def process_url(request):
                     yield img_str
 
             return StreamingHttpResponse(generate(), content_type="image/jpeg")
-            
-    else:
-        return JsonResponse({'status': 'failed'})
+
+    return JsonResponse({'status': 'failed'})
+
+
+@csrf_exempt
+def update_pred_class_selection(request):
+    if request.method == 'POST':
+        pred_class_selection = json.loads(request.body)
+        # Now you can do whatever you want with the selection
+        print(pred_class_selection)
+
+        # Save the selection to the session
+        request.session['pred_class_selection'] = pred_class_selection
+
+        return JsonResponse({'status': 'success'})
+
+    return JsonResponse({'status': 'failed'})
+
 
 def controls(request):
     if request.user.is_authenticated:

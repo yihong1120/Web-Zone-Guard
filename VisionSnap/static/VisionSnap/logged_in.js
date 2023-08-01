@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         xhr.open("POST", processUrl, true);
         xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         xhr.setRequestHeader("X-CSRFToken", document.getElementById('csrfToken').textContent);
-
+    
         xhr.onreadystatechange = function() {
             if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
                 const res = JSON.parse(this.responseText);
@@ -55,13 +55,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
                     imageDisplay.src = 'data:image/jpeg;base64,' + res.image;
                     imageDisplay.style.display = "block";  
                     placeholder.style.display = "none"; 
+                } else if (res.status === 'stream') {
+                    let source = new EventSource(processUrl);
+                    source.onmessage = function(event) {
+                        imageDisplay.src = 'data:image/jpeg;base64,' + event.data;
+                        imageDisplay.style.display = "block";  
+                        placeholder.style.display = "none"; 
+                    }
                 }
             }
         }
         console.log("url=" + encodeURIComponent(imageUrlInput.value));
         xhr.send("url=" + encodeURIComponent(imageUrlInput.value));
     }
-
+    
     imageInput.onchange = (e) => {
         const reader = new FileReader();
 
@@ -73,3 +80,33 @@ document.addEventListener('DOMContentLoaded', (event) => {
         reader.readAsDataURL(e.target.files[0]);
     }
 });
+
+// Global variable to keep track of checkbox selections
+var predClassSelection = [];
+
+function updatePredClassSelection(key) {
+    const checkbox = document.getElementById(key);
+    if (checkbox.checked) {
+        if (!predClassSelection.includes(key)) {
+            predClassSelection.push(key);
+        }
+    } else {
+        const index = predClassSelection.indexOf(key);
+        if (index > -1) {
+            predClassSelection.splice(index, 1);
+        }
+    }
+
+    // Now send the updated selection to the server
+    sendPredClassSelection();
+}
+
+function sendPredClassSelection() {
+    const xhr = new XMLHttpRequest();
+    const updateUrl = '/update_pred_class_selection/'; // Specify the URL to send the data to
+    xhr.open("POST", updateUrl, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRFToken", document.getElementById('csrfToken').textContent);
+    
+    xhr.send(JSON.stringify(predClassSelection));
+}
