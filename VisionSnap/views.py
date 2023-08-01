@@ -66,8 +66,6 @@ def get_url_content_type(url):
     except (requests.exceptions.RequestException, Exception) as e:
         return str(e)
 
-import torch
-
 def filter_detections(detections, selected_classes):
     # Determine which rows in 'detections' have an object ID that exists in the selection
     mask = torch.isin(detections[:, 5], selected_classes)

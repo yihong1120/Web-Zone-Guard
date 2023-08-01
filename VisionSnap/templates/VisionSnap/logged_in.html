@@ -34,6 +34,11 @@
 
 <div style="margin-left: 20px;">
     <!-- Slide bar -->
+    <h3>Polygons Setting</h3>
+    <button id="clearPolygons">Clear Polygons</button>
+    <button id="saveData">Save Data</button>
+
+    <!-- Slide bar -->
     <h3>Polygon Transparency</h3>
     <input type="range" min="1" max="100" value="50" id="slideBar">
 
@@ -47,13 +52,16 @@
     </div>
 
     <!-- Predict Class Checkbox buttons -->
-    <h3 onclick="toggleCollapse('collapseContent')">Predict Class Selection</h3>
-    <div id="collapseContent" class="collapse-content">
+    <h3>Predict Class Selection</h3>
+    <div style="display: flex; flex-wrap: wrap;">
         {% for key, value in pred_class_names.items %}
-        <input type="checkbox" id="{{ key }}" name="{{ key }}" onchange="updatePredClassSelection('{{ key }}')"> <!--'checked' Add checked attribute -->
-        <label for="{{ key }}">{{ value }}</label><br>
+        <div style="flex: 1 1 33.3333333333%;">
+            <input type="checkbox" id="{{ key }}" name="{{ key }}" onchange="updatePredClassSelection('{{ key }}')"> <!--'checked' Add checked attribute -->
+            <label for="{{ key }}">{{ value }}</label>
+        </div>
         {% endfor %}
     </div>
+
 </div>
 
 </div>
