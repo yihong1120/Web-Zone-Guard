@@ -7,12 +7,10 @@
 3. **Usage**:
    - Not applicable.
 
-4. **Code of Conduct**::
-   -      - Reference the VisionSnap/ directory for information about the project's notable features.
-
-**Project Structure:**
-   - The relevant files and directories in this repository include:
-     - WebZoneGuard/settings.py
+10. **Contact/Support**:
+   - Information on how to reach the project maintainers for support or further queries. See details in 'WebZoneGuard/settings.py'.
+11. **Acknowledgements** (optional):
+   - Not applicable.
      - WebZoneGuard/wsgi.py
      - WebZoneGuard/asgi.py
      - WebZoneGuard/urls.py
@@ -134,7 +132,7 @@
    - Be respectful.
 
 7. **Licence**:
-   - Information about the project's licence, indicating how the project can be used by others. See licence file 'LICENSE' for details.
+   - Information about the project's licence, indicating how the project can be used by others. See licence file 'LICENSE' for details. For support or further queries, refer to 'WebZoneGuard/settings.py'.
    - MIT License
 
    Copyright (c) 2023 YiHungWONG
