@@ -33,8 +33,8 @@
 3. **Table of Contents** (optional for smaller READMEs):
    - Not applicable.
 
-4. **Installation**:
-   - Django settings are available in 'WebZoneGuard/settings.py'.
+4. **Usage**:
+   - See the VisionSnap/ directory for information on how to use the project, including code snippets and command-line examples.
 
 5. **Usage**:
    - Not applicable.
