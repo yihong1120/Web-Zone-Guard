@@ -1,4 +1,6 @@
 # VisionSnap-Web
+**Project Title**: [See Licence File](LICENSE)
+**Project Title**: Django Web application project
 
 **Project Structure:**
    - The relevant files and directories in this repository include:
