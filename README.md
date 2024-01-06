@@ -1,6 +1,8 @@
 # VisionSnap-Web
 **Project Title**: [See Licence File](LICENSE)
-**Project Title**: Django Web application project
+
+2. **Introduction**:
+   - Django Web application project.
 
 **Project Structure:**
    - The relevant files and directories in this repository include:
@@ -26,8 +28,7 @@
    - Not applicable.
 
 4. **Installation**:
-   - Detailed instructions on how to install the project, including any prerequisites. These settings available in 'WebZoneGuard/settings.py'.
-   - Refer to 'WebZoneGuard/settings.py' file for more information on project settings.
+   - Django settings are available in 'WebZoneGuard/settings.py'.
 
 5. **Usage**:
    - Not applicable.
@@ -117,6 +118,7 @@
    - Django web application with admin interface.
 
 5. **Contributing**:
+   - Reference the 'WebZoneGuard/settings.py' file for information about the project's purpose and problem it solves.
    - Not applicable.
 
 6. **Code of Conduct**:
