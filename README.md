@@ -8,7 +8,7 @@
    - Not applicable.
 
 4. **Features**:
-   - Django web application with admin interface.
+   -      - Reference the VisionSnap/ directory for information about the project's notable features.
 
 **Project Structure:**
    - The relevant files and directories in this repository include:
@@ -40,7 +40,8 @@
    - Not applicable.
 
 6. **Features**:
-   - A list of notable features:
+   - 6. **Features:**
+     - Reference the VisionSnap/ directory for information about the project's notable features.
      - Web application with admin interface.
 
 7. **Contributing**:
@@ -71,7 +72,7 @@
    - Not applicable.
 
 6. **Features**:
-   - Django web application with admin interface.
+   -    - Reference the VisionSnap/ directory for information about the project's notable features.
 
 7. **Contributing**:
    - Not applicable.
