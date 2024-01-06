@@ -7,7 +7,7 @@
 3. **Usage**:
    - Not applicable.
 
-4. **Features**:
+4. **Code of Conduct**::
    -      - Reference the VisionSnap/ directory for information about the project's notable features.
 
 **Project Structure:**
